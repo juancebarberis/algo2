@@ -1,5 +1,5 @@
 #include "tp0.h"
-#include "stdio.h"
+
 void swap (int *x, int *y) 
 {
     int aux_x = *x, aux_y = *y;
