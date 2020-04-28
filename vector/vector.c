@@ -6,6 +6,7 @@
 void vector_destruir(vector_t* vector)
 {
     vector_redimensionar(vector, 0);
+    free(vector);
 }
 
 bool vector_obtener(vector_t* vector, size_t pos, int* valor)
