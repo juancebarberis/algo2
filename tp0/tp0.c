@@ -15,7 +15,7 @@ int maximo(int vector[], int n)
 
     int resultado = 0;
     
-    for (int i = 0; i < n; i++) 
+    for (int i = 1; i < n; i++) 
     {
         if(vector[i] > vector[resultado])
             resultado = i;
@@ -27,21 +27,21 @@ int maximo(int vector[], int n)
 
 int comparar(int vector1[], int n1, int vector2[], int n2) 
 {
-    if(n1 == 0 && n2 > 0) return -1;
-    if(n2 == 0 && n1 > 0) return 1;
-
     int i = 0;
-    while(i < n1 || i < n2) 
+    while(i < n1 && i < n2) 
     {
         if(vector1[i] > vector2[i]) return 1;
         if(vector1[i] < vector2[i]) return -1;
         
         i++; 
-        //Si alguno de los vectores llegó a su fin, sin elementos distintos, es necesario concluir que el otro es mayor.
-        if(i == n1 && i != n2) return -1;
-        if(i == n2 && i != n1) return 1;
     }   
-    return 0;
+
+    if(i == n1 && i != n2) 
+        return -1;
+    else if(i == n2 && i != n1) 
+        return 1;
+    else
+        return 0;
 }
 
 void seleccion(int vector[], int n) 
