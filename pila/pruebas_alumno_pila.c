@@ -45,18 +45,34 @@ void pruebas_pila_alumno() {
         double valor = valores2[i];
         print_test("Pila 2 apilar set 2 de valores", pila_apilar(pila_2, &valor));
         print_test("Lo apilado ahora es tope", pila_ver_tope(pila_2) == &valor);
-        print_test("Y es posible desapilarlo", pila_desapilar(pila_2) == &valor);
     }
-    print_test("Pila 2 está vacía", pila_esta_vacia(pila_2));
-    print_test("Prueba de volumen: 10.000 datos", true);
-    for(int i=0;i<10000;i++) 
+    print_test("Pila 2 no está vacía", !pila_esta_vacia(pila_2));
+    print_test("Pila 2 destruir, aún sin estar vacía", true);
+    pila_destruir(pila_2);
+    /**
+     * Pila 3
+     */ 
+    pila_t* pila_3 = pila_crear();
+    print_test("Pila 3 inicializada", pila_3);
+    print_test("Pila 3 está vacía", pila_esta_vacia(pila_3));
+    print_test("Prueba de volumen: apilar 1.000 datos", true);
+    for(int i = 0; i < 1000; i++) 
     {
         int valor = i;
         
-        if(!pila_apilar(pila_2, &valor) || pila_ver_tope(pila_2) != &valor || pila_desapilar(pila_2) != &valor) 
+        if(!pila_apilar(pila_3, &valor) || pila_ver_tope(pila_3) != &valor) 
             print_test("Problema intentando apilar", false);
     }
-    print_test("10.000 elementos apilados correctamente.", true);
-    pila_destruir(pila_2);
-    print_test("Pila 2 Destruir", true);
+    print_test("Pila no está vacía", !pila_esta_vacia(pila_3));
+    print_test("1.000 elementos apilados correctamente.", true);
+    print_test("Prueba de volumen: desapilar 1.000 datos", true);
+    while(!pila_esta_vacia(pila_3))
+    {
+        if(pila_ver_tope(pila_3) != pila_desapilar(pila_3))
+            print_test("Error al desapilar", false);
+    }
+    print_test("1.000 elementos desapilados correctamente.", true);
+    print_test("Pila 3 ahora está vacía", pila_esta_vacia(pila_3));
+    pila_destruir(pila_3);
+    print_test("Pila 3 Destruir", true);
 }

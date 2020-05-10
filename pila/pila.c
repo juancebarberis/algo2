@@ -43,14 +43,15 @@ void* pila_desapilar(pila_t *pila)
         return NULL;
     
     pila->cantidad -= 1;
-    void* dato_desapilado = pila->datos[pila->cantidad];
-    
-    if(pila->cantidad >= pila->capacidad / 4) 
+
+    if(pila->cantidad * pila->cantidad >= pila->capacidad / 4) 
     {
         pila->capacidad /= 2;
         if(!redimensionar(pila)) 
             return NULL;
     }
+    void* dato_desapilado = pila->datos[pila->cantidad];
+    pila->datos[pila->cantidad] = NULL;
     
     return dato_desapilado;
 }
@@ -67,15 +68,16 @@ bool pila_esta_vacia(const pila_t *pila)
 
 bool pila_apilar(pila_t *pila, void* valor)
 { 
-    if(pila->cantidad + 1 >= pila->capacidad / 4)
+    pila->cantidad += 1;
+    
+    if(pila->cantidad * pila->cantidad >= pila->capacidad / 4)
     {
         pila->capacidad *= 4;
         if(!redimensionar(pila))
             return false;
     }
 
-    pila->datos[pila->cantidad] = valor;
-    pila->cantidad += 1;
+    pila->datos[pila->cantidad - 1] = valor;
 
     return true;
 }
