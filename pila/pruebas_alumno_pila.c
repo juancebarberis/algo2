@@ -48,15 +48,15 @@ void pruebas_pila_alumno() {
         print_test("Y es posible desapilarlo", pila_desapilar(pila_2) == &valor);
     }
     print_test("Pila 2 está vacía", pila_esta_vacia(pila_2));
-    print_test("Prueba de volumen: 1.0000 datos", true);
+    print_test("Prueba de volumen: 10.000 datos", true);
     for(int i=0;i<10000;i++) 
     {
         int valor = i;
-        bool result = pila_apilar(pila_2, &valor);
-        if(!result || pila_ver_tope(pila_2) != &valor || pila_desapilar(pila_2) != &valor)
+        
+        if(!pila_apilar(pila_2, &valor) || pila_ver_tope(pila_2) != &valor || pila_desapilar(pila_2) != &valor) 
             print_test("Problema intentando apilar", false);
     }
-    print_test("1.0000 elementos apilados correctamente.", true);
+    print_test("10.000 elementos apilados correctamente.", true);
     pila_destruir(pila_2);
     print_test("Pila 2 Destruir", true);
 }

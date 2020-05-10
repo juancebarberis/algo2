@@ -11,7 +11,7 @@ struct pila {
 
 bool redimensionar(pila_t* pila);
 
-#define CAPACIDAD_INICIAL 100
+#define CAPACIDAD_INICIAL 4
 
 /* *****************************************************************
  *                    PRIMITIVAS DE LA PILA
@@ -42,6 +42,9 @@ void* pila_desapilar(pila_t *pila)
     if(pila_esta_vacia(pila)) 
         return NULL;
     
+    pila->cantidad -= 1;
+    void* dato_desapilado = pila->datos[pila->cantidad];
+    
     if(pila->cantidad >= pila->capacidad / 4) 
     {
         pila->capacidad /= 2;
@@ -49,9 +52,6 @@ void* pila_desapilar(pila_t *pila)
             return NULL;
     }
     
-    void* dato_desapilado = pila->datos[pila->cantidad - 1];
-    pila->datos[pila->cantidad] = NULL;
-    pila->cantidad -= 1;
     return dato_desapilado;
 }
 
@@ -67,10 +67,9 @@ bool pila_esta_vacia(const pila_t *pila)
 
 bool pila_apilar(pila_t *pila, void* valor)
 { 
-    if(pila->cantidad >= pila->capacidad / CAPACIDAD_INICIAL)
+    if(pila->cantidad + 1 >= pila->capacidad / 4)
     {
-        pila->capacidad *= 2;
-        
+        pila->capacidad *= 4;
         if(!redimensionar(pila))
             return false;
     }
