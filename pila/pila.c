@@ -9,7 +9,7 @@ struct pila {
     size_t capacidad;  // Capacidad del arreglo 'datos'.
 };
 
-bool redimensionar(pila_t* pila);
+bool redimensionar(pila_t* pila, size_t nueva_capacidad);
 
 #define CAPACIDAD_INICIAL 4
 
@@ -26,7 +26,13 @@ pila_t* pila_crear(void)
     
     pila->capacidad = CAPACIDAD_INICIAL;
     pila->cantidad = 0;
-    pila->datos = malloc(pila->capacidad);
+    pila->datos = malloc(pila->capacidad * sizeof(void*));
+
+    if(pila->datos == NULL)
+    {
+        free(pila);
+        return NULL;
+    }
 
     return pila;
 }
@@ -42,14 +48,15 @@ void* pila_desapilar(pila_t *pila)
     if(pila_esta_vacia(pila)) 
         return NULL;
     
-    pila->cantidad -= 1;
-
-    if(pila->cantidad * pila->cantidad >= pila->capacidad / 4) 
+    if(pila->cantidad <= pila->capacidad / 4 && pila->cantidad > CAPACIDAD_INICIAL) 
     {
-        pila->capacidad /= 2;
-        if(!redimensionar(pila)) 
+        if(!redimensionar(pila, pila->capacidad / 2)) 
             return NULL;
+        else
+            pila->capacidad /= 2;
     }
+
+    pila->cantidad -= 1;
     void* dato_desapilado = pila->datos[pila->cantidad];
     pila->datos[pila->cantidad] = NULL;
     
@@ -63,28 +70,29 @@ void* pila_ver_tope(const pila_t *pila)
 
 bool pila_esta_vacia(const pila_t *pila)
 {
-    return pila->cantidad == 0 ? true : false;
+    return pila->cantidad == 0;
 }
 
 bool pila_apilar(pila_t *pila, void* valor)
 { 
-    pila->cantidad += 1;
     
-    if(pila->cantidad * pila->cantidad >= pila->capacidad / 4)
+    if(pila->cantidad == pila->capacidad)
     {
-        pila->capacidad *= 4;
-        if(!redimensionar(pila))
+        if(!redimensionar(pila, pila->capacidad * 2))
             return false;
+        else
+            pila->capacidad *= 2;
     }
 
-    pila->datos[pila->cantidad - 1] = valor;
+    pila->datos[pila->cantidad] = valor;
+    pila->cantidad += 1;
 
     return true;
 }
 
-bool redimensionar(pila_t* pila)
+bool redimensionar(pila_t* pila, size_t nueva_capacidad)
 {
-    void** aux = realloc(pila->datos, pila->capacidad);
+    void** aux = realloc(pila->datos, nueva_capacidad * sizeof(void*));
 
     if(aux == NULL || aux == 0)
         return false;
