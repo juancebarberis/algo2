@@ -52,8 +52,6 @@ void* pila_desapilar(pila_t *pila)
     {
         if(!redimensionar(pila, pila->capacidad / 2)) 
             return NULL;
-        else
-            pila->capacidad /= 2;
     }
 
     pila->cantidad -= 1;
@@ -80,8 +78,6 @@ bool pila_apilar(pila_t *pila, void* valor)
     {
         if(!redimensionar(pila, pila->capacidad * 2))
             return false;
-        else
-            pila->capacidad *= 2;
     }
 
     pila->datos[pila->cantidad] = valor;
@@ -98,5 +94,6 @@ bool redimensionar(pila_t* pila, size_t nueva_capacidad)
         return false;
 
     pila->datos = aux;
+    pila->capacidad = nueva_capacidad;
     return true;
 }

@@ -1,6 +1,7 @@
 #include "pila.h"
 #include "testing.h"
 #include <stddef.h>
+#include <stdlib.h>
 
 /* ******************************************************************
  *                   PRUEBAS UNITARIAS ALUMNO
@@ -22,10 +23,9 @@ void pruebas_pila_alumno() {
     int valores1[] = {5, 64, 2, 1, 9, 0, 1, 223, 54, 69};
     for(int i = 0; i < 10; i++)
     {
-        int valor = valores1[i];
-        print_test("Pila 1 apilar set 1 de valores", pila_apilar(pila_1, &valor));
-        print_test("Lo apilado ahora es tope", pila_ver_tope(pila_1) == &valor);
-        print_test("Y es posible desapilarlo", pila_desapilar(pila_1) == &valor);
+        print_test("Pila 1 apilar set 1 de valores", pila_apilar(pila_1, &valores1[i]));
+        print_test("Lo apilado ahora es tope", pila_ver_tope(pila_1) == &valores1[i]);
+        print_test("Y es posible desapilarlo", pila_desapilar(pila_1) == &valores1[i]);
     }
     print_test("Pila 1 aún no está vacía, el elemento NULL del principio sigue ahí", !pila_esta_vacia(pila_1));
     print_test("Pila 1 lo desapilamos", pila_desapilar(pila_1) == NULL);
@@ -42,9 +42,8 @@ void pruebas_pila_alumno() {
     double valores2[] = {1.5, 6.7, 0.0, 1.2, 6.0};
     for(int i = 0; i < 5; i++)
     {
-        double valor = valores2[i];
-        print_test("Pila 2 apilar set 2 de valores", pila_apilar(pila_2, &valor));
-        print_test("Lo apilado ahora es tope", pila_ver_tope(pila_2) == &valor);
+        print_test("Pila 2 apilar set 2 de valores", pila_apilar(pila_2, &valores2[i]));
+        print_test("Lo apilado ahora es tope", pila_ver_tope(pila_2) == &valores2[i]);
     }
     print_test("Pila 2 no está vacía", !pila_esta_vacia(pila_2));
     print_test("Pila 2 destruir, aún sin estar vacía", true);
@@ -56,11 +55,10 @@ void pruebas_pila_alumno() {
     print_test("Pila 3 inicializada", pila_3);
     print_test("Pila 3 está vacía", pila_esta_vacia(pila_3));
     print_test("Prueba de volumen: apilar 1.000 datos", true);
+    int* valores3 = malloc(1000 * sizeof(int)); 
     for(int i = 0; i < 1000; i++) 
-    {
-        int valor = i;
-        
-        if(!pila_apilar(pila_3, &valor) || pila_ver_tope(pila_3) != &valor) 
+    {        
+        if(!pila_apilar(pila_3, &valores3[i]) || pila_ver_tope(pila_3) != &valores3[i]) 
             print_test("Problema intentando apilar", false);
     }
     print_test("Pila no está vacía", !pila_esta_vacia(pila_3));
@@ -74,5 +72,6 @@ void pruebas_pila_alumno() {
     print_test("1.000 elementos desapilados correctamente.", true);
     print_test("Pila 3 ahora está vacía", pila_esta_vacia(pila_3));
     pila_destruir(pila_3);
+    free(valores3);
     print_test("Pila 3 Destruir", true);
 }
