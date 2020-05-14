@@ -77,9 +77,9 @@ void pruebas_pila_alumno() {
     int j = 999;
     while(!pila_esta_vacia(pila_3))
     {
-        void* aux = pila_desapilar(pila_3);
+        void* aux3 = pila_desapilar(pila_3);
 
-        if(aux != &valores3[j])
+        if(aux3 != &valores3[j])
             print_test("Error al desapilar", false);
         j--;
     }
