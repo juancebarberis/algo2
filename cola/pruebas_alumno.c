@@ -19,7 +19,8 @@ void prueba_generica()
     print_test("No es posible desencolar aún", cola_desencolar(cola_1) == NULL);
     print_test("No es posible ver el primero aún", cola_ver_primero(cola_1) == NULL);
     print_test("Es posible encolar el elemento NULL", cola_encolar(cola_1, NULL));
-    print_test("Y es posible desencolar el elemento NULL", cola_desencolar(cola_1) == NULL);
+    print_test("La cola ya no está vacía", !cola_esta_vacia(cola_1));
+    print_test("Es posible desencolar el elemento NULL", cola_desencolar(cola_1) == NULL);
     print_test("Cola está vacía como al principio", cola_esta_vacia(cola_1));
     print_test("Encolar 10 elementos", true);
     for(int i = 0; i < 10; i++)
@@ -74,16 +75,9 @@ void prueba_valores()
 }
 
 /**
- * Se encolan y desencolan 10 elementos de tipo double.
- * Se comprueba que los valores (val) almacenados sean distintos entre si.
+ * Prueba con un arreglo alojado en memoria dinámica.
+ * Se le pasa free() como referencia a cola_destruir para que también libere la memoria del arreglo
  * */
-
-//Función auxiliar para pasar a cola_destruir
-void destruir_dato_de_prueba(void* dato)
-{
-    free(dato);
-}
-
 void prueba_arreglo_dinamico()
 {
     cola_t* cola_3 = cola_crear();
@@ -94,18 +88,11 @@ void prueba_arreglo_dinamico()
     }
     else
     {
-        //for(int k = 0; k < 100; k++)
-        //{
-        //    if(!cola_encolar(cola_3, &valores3[k]))
-        //        print_test("Error al encolar", false);
-        //}
         print_test("Encolar arreglo", cola_encolar(cola_3, valores3));
         print_test("Cola no está vacía", !cola_esta_vacia(cola_3));
-        //print_test("Primer elemento (ptr) es igual a valores[0]", cola_ver_primero(cola_3) == &valores3[0]);
-        //print_test("Primer elemento (ptr) no se repite por lo que es != valores[1]", cola_ver_primero(cola_3) != &valores3[1]);
 
-        cola_destruir(cola_3, destruir_dato_de_prueba);
-        print_test("Cola destruir", true);
+        cola_destruir(cola_3, free);
+        print_test("Cola destruir con free()", true);
     }
 }
 

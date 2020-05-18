@@ -17,15 +17,15 @@ void nodo_destruir(nodo_t* nodo);
  * ESTRUCTURAS
  * */
 
-typedef struct nodo {
+struct nodo {
     void* dato;
     nodo_t* proximo;
-} nodo_t;
+};
 
-typedef struct cola {
+struct cola {
     nodo_t* primero;
     nodo_t* ultimo;
-} cola_t;
+};
 
 
 /**
@@ -48,10 +48,9 @@ void cola_destruir(cola_t *cola, void (*destruir_dato)(void*))
 {
     while(!cola_esta_vacia(cola))
     {
+        void* dato = cola_desencolar(cola);
         if(destruir_dato)
-            (*destruir_dato)(cola_desencolar(cola));
-        else
-            cola_desencolar(cola);
+            (*destruir_dato)(dato);
     }
     free(cola);
 }
@@ -81,10 +80,7 @@ void* cola_desencolar(cola_t *cola)
     nodo_t* nodo_desencolado = cola->primero;
     void* dato_desencolado = nodo_desencolado->dato;
     
-    if(cola->primero->proximo == NULL)
-        cola->primero = NULL;
-    else
-        cola->primero = cola->primero->proximo;
+    cola->primero = cola->primero->proximo;
 
     nodo_destruir(nodo_desencolado);
     
