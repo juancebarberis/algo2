@@ -96,6 +96,59 @@ void prueba_arreglo_dinamico()
     }
 }
 
+/**
+ * Prueba de volumen. Se encolan 1000 elementos y luego de los desencolan dando
+ * finalizada la prueba una vez que se destruye la cola estando vacía
+ * */
+void prueba_volumen()
+{
+    cola_t* cola_4 = cola_crear();
+    print_test("Se encolan 1000 elementos", true);
+    int* valores4 = malloc(1000 * sizeof(int)); 
+    for(int i = 0; i < 1000; i++) 
+    {        
+        if(!cola_encolar(cola_4, &valores4[i])) 
+            print_test("Error al intentar encolar", false);
+    }
+    print_test("1000 elementos encolados", true);
+    print_test("Cola no está vacía", !cola_esta_vacia(cola_4));
+    print_test("Desencolar todos los elementos comparandolos con el puntero correspondiente", true);
+    int j = 0;
+    while(!cola_esta_vacia(cola_4))
+    {
+        if(cola_desencolar(cola_4) != &valores4[j]){
+            print_test("Error al comparar punteros", false);
+            break;
+        }
+        j++;
+    }
+    print_test("La cola está vacía y es destruida", cola_esta_vacia(cola_4));
+    cola_destruir(cola_4, NULL);
+    free(valores4);
+}
+
+/**
+ * En esta prueba se intenta encolar colas, para luego ser destruidas mediante el puntero a función de cola_destruir
+ * */
+void cola_secundaria_destruir(void* cola_secundaria)
+{
+    cola_destruir(cola_secundaria, NULL);
+}
+void prueba_coca_cola()
+{
+    cola_t* cola_principal = cola_crear();
+    print_test("Cola principal inicializada", true);
+    for(int i = 0; i < 5; i++)
+    {
+        if(!cola_encolar(cola_principal, cola_crear()))
+            print_test("Error al encolar cola secundaria", false);
+    }
+    print_test("5 Colas encoladas en cola principal", true);
+    print_test("Cola principal no está vacía", !cola_esta_vacia(cola_principal));
+    print_test("Destruimos la cola_principal, también destruyendo cada cola_secundaria encolada", true);
+    cola_destruir(cola_principal, cola_secundaria_destruir);
+}
+
 
 void pruebas_cola_alumno()
 {
@@ -107,4 +160,10 @@ void pruebas_cola_alumno()
     
     printf("\nPRUEBAS DE ARREGLO EN MEMORIA DINÁMICA...\n");
     prueba_arreglo_dinamico();
+
+    printf("\nPRUEBAS DE VOLUMEN...\n");
+    prueba_volumen();
+
+    printf("\nPRUEBAS ENCOLANDO COLAS...\n");
+    prueba_coca_cola();
 }
