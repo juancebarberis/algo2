@@ -19,7 +19,6 @@ void prueba_generica()
     print_test("No es posible desencolar aún", cola_desencolar(cola_1) == NULL);
     print_test("No es posible ver el primero aún", cola_ver_primero(cola_1) == NULL);
     print_test("Es posible encolar el elemento NULL", cola_encolar(cola_1, NULL));
-    print_test("La cola ya no está vacía", !cola_esta_vacia(cola_1));
     print_test("Es posible desencolar el elemento NULL", cola_desencolar(cola_1) == NULL);
     print_test("Cola está vacía como al principio", cola_esta_vacia(cola_1));
     print_test("Encolar 10 elementos", true);
