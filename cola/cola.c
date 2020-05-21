@@ -82,6 +82,9 @@ void* cola_desencolar(cola_t *cola)
     
     cola->primero = cola->primero->proximo;
 
+    if(cola->ultimo == nodo_desencolado)
+        cola->ultimo = cola->primero;
+
     nodo_destruir(nodo_desencolado);
     
     return dato_desencolado;
