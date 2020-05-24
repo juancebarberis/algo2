@@ -137,11 +137,119 @@ void prueba_iterador_interno()
             print_test("Error al insertar valores", false);
     }
     print_test("Arreglo {1, 6, 8, 23, 77, 43, 89, 100, 0, 45} cargado en la lista", true);
-    print_test("Iterar hasta encontrar el valor == 0", true);
+    print_test("Iterar hasta encontrar el valor == 100", true);
     lista_iterar(lista, visitar, &contador);
     print_test("Destruir lista", true);
     lista_destruir(lista, NULL);
 }
+
+//Función auxiliar para prueba_iterador_externo_primos()
+bool es_primo(int valor)
+{
+    if(valor == 0 || valor == 1) return false;
+    for(int i = 2; i < valor / 2; i++)
+    {
+        if(valor % i  == 0)
+            return false;
+    }
+    return true;
+}
+
+//Función auxiliar para prueba_iterador_externo_primos()
+bool print_valores(void* valor, void* corte)
+{
+    int* valor_int = valor;
+    corte == valor ? printf("%d.\n", *valor_int) : printf("%d, ", *valor_int);
+    return true;
+}
+
+/**
+ * En esta prueba: 
+ * - Creamos una lista con números del 0 al 100. 
+ * - Creamos un iterador.
+ * - Depuramos la lista de todos los números que no sean primos.
+ * - Una vez destruimos el iterador, borramos todos los elementos de la lista comprobando que sean todos primos.
+ * */
+void prueba_iterador_externo_primos()
+{
+    lista_t* lista = lista_crear();
+    print_test("Lista inicializada", true);
+    print_test("Se insertan valores del 0 al 100 en la lista", true);
+    int valores[100];
+    for(int i = 0; i < 101; i++)
+    {
+        valores[i] = i;
+        if(!lista_insertar_ultimo(lista, &valores[i]))
+            print_test("Error al intentar insertar en la lista", false);
+    }
+    print_test("Lista con valores", !lista_esta_vacia(lista));
+    lista_iter_t* iter = lista_iter_crear(lista);
+    print_test("Iterador externo creado", true);
+    printf("Comprobaciones genéricas del iterador externo. \n");
+    print_test("Elemento (ptr) actual = valores[0]", lista_iter_ver_actual(iter) == &valores[0]);
+    int* aux_cero = lista_iter_ver_actual(iter);
+    print_test("Elemento (val) actual = 0", *aux_cero == 0);
+    print_test("Iterador no está al final", !lista_iter_al_final(iter));
+    print_test("Comenzando depuración de valores no primos", true);
+    int *valor;
+    while(!lista_iter_al_final(iter))
+    {
+        valor = lista_iter_ver_actual(iter);
+        if(!es_primo(*valor)) 
+            lista_iter_borrar(iter);
+        else 
+            lista_iter_avanzar(iter);
+    }
+    valor = lista_iter_ver_actual(iter);
+    if(!es_primo(*valor)) //El ciclo no cae en el último elemento, por eso lo verifico aquí
+        lista_iter_borrar(iter);  
+    print_test("El iterador ahora está al final", lista_iter_al_final(iter));
+    print_test("El iterador puede ser borrado", true);
+    lista_iter_destruir(iter);
+    print_test("La lista ahora solo tiene números primos", true);
+    lista_iterar(lista, print_valores, lista_ver_ultimo(lista));
+    print_test("Podemos destruir la lista", true);
+    lista_destruir(lista, NULL);
+}
+
+void prueba_iterador_externo_lista_vacia()
+{
+    lista_t* lista = lista_crear();
+    lista_iter_t* iter = lista_iter_crear(lista);
+    print_test("Lista e Iterador inicializados", true);
+    print_test("Lista está vacía", lista_esta_vacia(lista));
+    print_test("No es posible borrar a través del iterador", !lista_iter_borrar(iter));
+    print_test("Iter ver actual es NULL", lista_iter_ver_actual(iter) == NULL);
+    print_test("Iter está al final", lista_iter_al_final(iter));
+    print_test("Iter no es posible avanzar", !lista_iter_avanzar(iter));
+    lista_iter_destruir(iter); lista_destruir(lista, NULL);
+    print_test("Destruir Lista e Iterador", true);
+}
+
+void prueba_iterador_externo_in_out()
+{
+    lista_t* lista = lista_crear();
+    lista_iter_t* iter = lista_iter_crear(lista);
+    double valores[] = {3.14, 1.41, 2.71, 6.67, 7.29};
+    print_test("Lista e Iterador inicializados", true);
+    print_test("Insertar valores[0]", lista_iter_insertar(iter, &valores[0]));
+    print_test("Iterador está al final", lista_iter_al_final(iter));
+    print_test("Borrar valores[0]", lista_iter_borrar(iter) == &valores[0]);
+    print_test("Insertar valores[1]", lista_iter_insertar(iter, &valores[1]));
+    print_test("Insertar valores[2]", lista_iter_insertar(iter, &valores[2]));
+    print_test("Borrar valores[2]", lista_iter_borrar(iter) == &valores[2]);
+    print_test("Borrar valores[1]", lista_iter_borrar(iter) == &valores[1]);
+    print_test("Insertar valores[3] y valores[4],", lista_iter_insertar(iter, &valores[3]) && lista_iter_insertar(iter, &valores[4]));
+    print_test("Avanzamos hasta el final", lista_iter_avanzar(iter));
+    print_test("Estamos en el final", lista_iter_al_final(iter));
+    print_test("Insertar valores[0] al final de la lista", lista_iter_insertar(iter, &valores[0]));
+    print_test("El último de la lista = actual del iterador", lista_ver_ultimo(lista) == lista_iter_ver_actual(iter));
+    lista_iter_destruir(iter); 
+    lista_destruir(lista, NULL);
+    print_test("Destruir Lista e Iterador", true);
+
+}
+
 
 /**
  * PRUEBAS
@@ -164,8 +272,17 @@ void pruebas_lista_alumno(void)
     printf("\nPRUEBAS DE ITERADOR INTERNO\n");
     prueba_iterador_interno();
     
-    /*
-    printf("\nEJEMPLO ITERADOR EXTERNO");
-    ejemplo_iteradores();
-    */
+    printf("\nPRUEBAS DE ITERADOR EXTERNO CON UNA LISTA DE NUMEROS PRIMOS\n");
+    prueba_iterador_externo_primos();
+
+    printf("\nPRUEBAS DE ITERADOR EXTERNO CON LISTA VACÍA\n");
+    prueba_iterador_externo_lista_vacia();
+
+    printf("\nPRUEBAS DE ITERADOR EXTERNO INSERTAR Y BORRAR REPETIDAS VECES\n");
+    prueba_iterador_externo_in_out();
+
+
+    //printf("\nEJEMPLO ITERADOR EXTERNO");
+    //ejemplo_iteradores();
+    
 }

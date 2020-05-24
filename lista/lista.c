@@ -77,7 +77,7 @@ bool lista_insertar_ultimo(lista_t *lista, void *dato)
 
     if(!nuevo_nodo) return false;
     
-    if(lista->ultimo != NULL)
+    if(lista->ultimo)
         lista->ultimo->proximo = nuevo_nodo;
     
     if(!lista->primero)
@@ -96,7 +96,7 @@ void *lista_borrar_primero(lista_t *lista)
     nodo_t* nodo_borrado = lista->primero;
     void* dato = nodo_borrado->dato;
 
-    if(lista->primero->proximo == NULL) 
+    if(!lista->primero->proximo) 
     {
         lista->primero = NULL; 
         lista->ultimo = NULL;
@@ -172,7 +172,8 @@ lista_iter_t *lista_iter_crear(lista_t *lista)
 
 bool lista_iter_avanzar(lista_iter_t *iter)
 {
-    if(lista_iter_al_final(iter)) return false;
+    if(lista_iter_al_final(iter) || lista_esta_vacia(iter->lista)) 
+        return false;
 
     iter->anterior = iter->actual;
     iter->actual = iter->actual->proximo;
@@ -187,7 +188,7 @@ void *lista_iter_ver_actual(const lista_iter_t *iter)
 
 bool lista_iter_al_final(const lista_iter_t *iter)
 {
-    return iter->actual->proximo == NULL ? true : false;
+    return !iter->actual || iter->actual == iter->lista->ultimo  ? true : false;
 }
 
 void lista_iter_destruir(lista_iter_t *iter)
@@ -197,28 +198,58 @@ void lista_iter_destruir(lista_iter_t *iter)
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato)
 {
-    nodo_t* nuevo_nodo = nodo_crear(dato, iter->actual);
+    bool resultado = true;
+    if(!iter->anterior && lista_insertar_primero(iter->lista, dato)) 
+    {
+        iter->actual = iter->lista->primero;
+    }
+    else if(lista_iter_al_final(iter) && lista_insertar_ultimo(iter->lista, dato))
+    {
+        iter->actual->proximo = iter->lista->ultimo;
+        iter->actual = iter->lista->ultimo;
+    }
+    else 
+    {
+        nodo_t* nuevo_nodo = nodo_crear(dato, iter->actual);
 
-    if(!nuevo_nodo) return false;
-
-    iter->lista->largo++;
-    iter->actual = nuevo_nodo;
-    iter->anterior->proximo = iter->actual;
-
-    return true;
+        if(!nuevo_nodo && !lista_insertar_primero(iter->lista, dato)) 
+            resultado = false;
+        else
+        {
+            iter->anterior->proximo = nuevo_nodo;
+            iter->actual = nuevo_nodo;
+            iter->lista->largo++;
+        }
+    }
+    return resultado;
 }
 
 void *lista_iter_borrar(lista_iter_t *iter)
 {
-    nodo_t* nodo_borrado = iter->actual;
-    void* dato = nodo_borrado->dato;
+    if(lista_esta_vacia(iter->lista)) return NULL;
 
-    if(iter->anterior)
-        iter->anterior->proximo = nodo_borrado->proximo;
-    
+    if(!iter->anterior || lista_largo(iter->lista) == 1)
+    {
+        iter->actual = iter->actual->proximo;
+        return lista_borrar_primero(iter->lista);
+    }
+
+    nodo_t* nodo_proximo = iter->actual->proximo;
+    void* dato = iter->actual->dato;
     free(iter->actual);
-    
-    iter->actual = nodo_borrado->proximo;
 
+    if(!nodo_proximo) 
+    {
+        iter->anterior->proximo = NULL;
+        iter->actual = iter->anterior;
+        iter->lista->ultimo = iter->actual;
+    }
+    else
+    {
+        iter->actual = nodo_proximo;
+        iter->anterior->proximo = nodo_proximo;
+    }
+    iter->lista->largo--;
+    
     return dato;
-}
+}  
