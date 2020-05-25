@@ -202,9 +202,9 @@ void prueba_iterador_externo_primos()
         else 
             lista_iter_avanzar(iter);
     }
-    valor = lista_iter_ver_actual(iter);
-    if(!es_primo(*valor)) //El ciclo no cae en el último elemento, por eso lo verifico aquí
-        lista_iter_borrar(iter);  
+    //valor = lista_iter_ver_actual(iter);
+    //if(!es_primo(*valor)) //El ciclo no cae en el último elemento, por eso lo verifico aquí
+    //    lista_iter_borrar(iter);  
     print_test("El iterador ahora está al final", lista_iter_al_final(iter));
     print_test("El iterador puede ser borrado", true);
     lista_iter_destruir(iter);
@@ -235,13 +235,14 @@ void prueba_iterador_externo_in_out()
     double valores[] = {3.14, 1.41, 2.71, 6.67, 7.29};
     print_test("Lista e Iterador inicializados", true);
     print_test("Insertar valores[0]", lista_iter_insertar(iter, &valores[0]));
-    print_test("Iterador está al final", lista_iter_al_final(iter));
+    print_test("Iterador está al final", !lista_iter_al_final(iter));
     print_test("Borrar valores[0]", lista_iter_borrar(iter) == &valores[0]);
     print_test("Insertar valores[1]", lista_iter_insertar(iter, &valores[1]));
     print_test("Insertar valores[2]", lista_iter_insertar(iter, &valores[2]));
     print_test("Borrar valores[2]", lista_iter_borrar(iter) == &valores[2]);
     print_test("Borrar valores[1]", lista_iter_borrar(iter) == &valores[1]);
     print_test("Insertar valores[3] y valores[4],", lista_iter_insertar(iter, &valores[3]) && lista_iter_insertar(iter, &valores[4]));
+    print_test("Avanzamos hasta el final", lista_iter_avanzar(iter));
     print_test("Avanzamos hasta el final", lista_iter_avanzar(iter));
     print_test("Estamos en el final", lista_iter_al_final(iter));
     print_test("Insertar valores[0] al final de la lista", lista_iter_insertar(iter, &valores[0]));

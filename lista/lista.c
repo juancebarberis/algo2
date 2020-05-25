@@ -189,7 +189,7 @@ void *lista_iter_ver_actual(const lista_iter_t *iter)
 
 bool lista_iter_al_final(const lista_iter_t *iter)
 {
-    return !iter->actual || iter->actual == iter->lista->ultimo  ? true : false;
+    return !iter->actual ? true : false;
 }
 
 void lista_iter_destruir(lista_iter_t *iter)
@@ -206,8 +206,9 @@ bool lista_iter_insertar(lista_iter_t *iter, void *dato)
     }
     else if(lista_iter_al_final(iter) && lista_insertar_ultimo(iter->lista, dato))
     {
-        iter->actual->proximo = iter->lista->ultimo;
         iter->actual = iter->lista->ultimo;
+        iter->actual->proximo = NULL;
+        iter->anterior->proximo = iter->actual;
     }
     else 
     {
@@ -227,7 +228,7 @@ bool lista_iter_insertar(lista_iter_t *iter, void *dato)
 
 void *lista_iter_borrar(lista_iter_t *iter)
 {
-    if(lista_esta_vacia(iter->lista)) return NULL;
+    if(lista_esta_vacia(iter->lista) || lista_iter_al_final(iter)) return NULL;
 
     if(!iter->anterior || lista_largo(iter->lista) == 1)
     {
@@ -242,8 +243,8 @@ void *lista_iter_borrar(lista_iter_t *iter)
     if(!nodo_proximo) 
     {
         iter->anterior->proximo = NULL;
-        iter->actual = iter->anterior;
-        iter->lista->ultimo = iter->actual;
+        iter->actual = NULL;
+        iter->lista->ultimo = iter->anterior;
     }
     else
     {
