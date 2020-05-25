@@ -1,4 +1,5 @@
 #include "lista.h"
+#include <stdlib.h>
 
 typedef struct nodo {
     void* dato;
@@ -250,6 +251,6 @@ void *lista_iter_borrar(lista_iter_t *iter)
         iter->anterior->proximo = nodo_proximo;
     }
     iter->lista->largo--;
-    
+
     return dato;
 }  

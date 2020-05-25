@@ -1,6 +1,7 @@
 #include "lista.h"
 #include "testing.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void prueba_generica_null()
 {
@@ -176,7 +177,8 @@ void prueba_iterador_externo_primos()
     print_test("Lista inicializada", true);
     print_test("Se insertan valores del 0 al 100 en la lista", true);
     int valores[100];
-    for(int i = 0; i < 101; i++)
+    int i;
+    for(i = 0; i < 100; i++)
     {
         valores[i] = i;
         if(!lista_insertar_ultimo(lista, &valores[i]))
