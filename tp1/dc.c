@@ -4,30 +4,8 @@
 #include<string.h>
 #include<math.h>
 #include "strutil.h"
+#include "calcutil.h"
 #include "pila.h"
-
-/**
- * Recibe una cadena y comprueba si es una operando válido.
- * Devuelve 1 en caso de que sea un operando, o 0 si no lo es.
- * */
-int es_operando(char* cadena);
-
-/**
- * Recibe una cadena y la convierte a long, alojandola en memoria dinámica.
- * Pre: la cadena puede ser convertida porque es un operando válido.
- * */
-long* dynatol(const char *str);
-
-/**
- * Recibe un valor de tipo long y lo almacena en memoria dinámica.
- * */
-long *dynlong(long val);
-
-/**
- * Recibe un operador en formato char*.
- * Devuelve la cantidad de operandos que necesita para operar.
- * */
-size_t operador_necesita(char* operador);
 
 /**
  * Realiza el cálculo en notación polaca inversa.
@@ -61,58 +39,6 @@ int main(int argc, char* argv[])
       calcular(buffer);
   }
   free(buffer);
-  return 0;
-}
-
-int es_operando(char* cadena)
-{
-  if(strcmp(cadena, "+") != 0 
-    && strcmp(cadena, "-") != 0 
-    && strcmp(cadena, "/") != 0 
-    && strcmp(cadena, "*") != 0 
-    && strcmp(cadena, "sqrt") != 0 
-    && strcmp(cadena, "^") != 0 
-    && strcmp(cadena, "log") != 0 
-    && strcmp(cadena, "?") != 0
-    )
-    return 1;
-  else
-    return 0;
-}
-
-long* dynatol(const char *str)
-{
-  long* value = malloc(sizeof(long));
-
-  if(!value) 
-    return NULL;
-
-  value[0] = atol(str);
-
-  return value; 
-}
-
-long *dynlong(long val)
-{
-  long* value = malloc(sizeof(long));
-
-  if(!value) 
-    return NULL;
-
-  value[0] = val;
-
-  return value;   
-}
-
-size_t operador_necesita(char* operador)
-{
-  if(strcmp(operador, "+") == 0 || strcmp(operador, "-") == 0 || strcmp(operador, "*") == 0 || strcmp(operador, "/") == 0 || strcmp(operador, "^") == 0 || strcmp(operador, "log") == 0)
-    return 2;
-  else if(strcmp(operador, "sqrt") == 0)
-    return 1;
-  else if(strcmp(operador, "?") == 0)
-    return 3;
-  
   return 0;
 }
 
