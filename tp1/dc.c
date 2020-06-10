@@ -6,6 +6,64 @@
 #include "strutil.h"
 #include "pila.h"
 
+/**
+ * Recibe una cadena y comprueba si es una operando válido.
+ * Devuelve 1 en caso de que sea un operando, o 0 si no lo es.
+ * */
+int es_operando(char* cadena);
+
+/**
+ * Recibe una cadena y la convierte a long, alojandola en memoria dinámica.
+ * Pre: la cadena puede ser convertida porque es un operando válido.
+ * */
+long* dynatol(const char *str);
+
+/**
+ * Recibe un valor de tipo long y lo almacena en memoria dinámica.
+ * */
+long *dynlong(long val);
+
+/**
+ * Recibe un operador en formato char*.
+ * Devuelve la cantidad de operandos que necesita para operar.
+ * */
+size_t operador_necesita(char* operador);
+
+/**
+ * Realiza el cálculo en notación polaca inversa.
+ * Imprime por salida stdout el resultado, o ERROR en caso de que la operación no se lleve a cabo.
+ * */
+void calcular(char* linea);
+
+
+int main(int argc, char* argv[])
+{
+  char* buffer = malloc(sizeof(char) * CANTIDAD_INICIAL);
+
+  if(!buffer) {
+    fprintf(stderr, "No es posible alojar memoria inicial...\n");
+    return -1;
+  }
+
+  char* linea;
+  size_t linea_len;
+  
+  while(fgets(buffer, CANTIDAD_INICIAL, stdin))
+  {
+    linea_len = strlen(buffer);
+
+    if(strcmp(buffer + linea_len - 1, "\n") == 0) {
+      linea = substr(buffer, linea_len - 1);
+      calcular(linea);
+      free(linea);
+    }
+    else
+      calcular(buffer);
+  }
+  free(buffer);
+  return 0;
+}
+
 int es_operando(char* cadena)
 {
   if(strcmp(cadena, "+") != 0 
@@ -166,32 +224,4 @@ void calcular(char* linea)
   
   pila_destruir(pila);
   free_strv(elementos);
-}
-
-int main(int argc, char* argv[])
-{
-  char* buffer = malloc(sizeof(char) * CANTIDAD_INICIAL);
-
-  if(!buffer) {
-    fprintf(stderr, "No es posible alojar memoria inicial...\n");
-    return -1;
-  }
-
-  char* linea;
-  size_t linea_len;
-  
-  while(fgets(buffer, CANTIDAD_INICIAL, stdin))
-  {
-    linea_len = strlen(buffer);
-
-    if(strcmp(buffer + linea_len - 1, "\n") == 0) {
-      linea = substr(buffer, linea_len - 1);
-      calcular(linea);
-      free(linea);
-    }
-    else
-      calcular(buffer);
-  }
-  free(buffer);
-  return 0;
 }
