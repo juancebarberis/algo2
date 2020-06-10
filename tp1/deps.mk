@@ -1,1 +1,1 @@
-dc: cd.o strutil.o pila.o
+dc: dc.o strutil.o pila.o
