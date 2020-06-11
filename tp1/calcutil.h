@@ -30,4 +30,9 @@ long *dynlong(long val);
  * */
 size_t operador_necesita(char* operador);
 
+/**
+ * Otorga un valor numerico a la precedencia de un operador
+ * */
+int precedencia(char* operador);
+
 #endif

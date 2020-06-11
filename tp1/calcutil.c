@@ -52,3 +52,15 @@ size_t operador_necesita(char* operador)
   
   return 0;
 }
+
+int precedencia(char* operador)
+{
+  if(strcmp(operador, "^") == 0)
+    return 3;
+  else if(strcmp(operador, "*") == 0 || strcmp(operador, "/") == 0)
+    return 2;
+  else if(strcmp(operador, "+") == 0 || strcmp(operador, "-") == 0)
+    return 1;
+  
+  return 0;
+}

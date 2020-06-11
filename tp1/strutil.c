@@ -42,7 +42,6 @@ char **split(const char *str, char sep)
 
   for(int i = 0; i < len + 1; i++)
   {
-    //printf("%d actual -> %c (%d) \n", i, str[i], pos_separador);
 
     if(len == 0) {
       resultado[k] = strdup(vacio);
@@ -128,7 +127,6 @@ char *join(char **strv, char sep)
       char* resultado = realloc(resultado, capacidad * 2);
       capacidad *= 2;
     }
-    //printf("%d -> %s |", i, strv[i]);
 
     final_actual = stpcpy(i == 0 ? resultado : final_actual, strv[i]);
     if(strv[i + 1]) {
