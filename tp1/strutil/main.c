@@ -32,7 +32,7 @@ void pruebas_substr()
 void pruebas_split()
 {
   printf("\nPrueba con varias cadenas de split...\n");
-
+  
   char** prueba0 = split("abc,,def", ',');
   printf("Prueba de split 0 -> [%s - %s - %s] \n", prueba0[0], prueba0[1], prueba0[2]);
   char** prueba1 = split("abc,def,", ',');
@@ -47,6 +47,10 @@ void pruebas_split()
   printf("Prueba de split 5 -> [%s - %s] \n", prueba5[0], prueba5[1]);
   char** prueba6 = split("abc,def,ghi,zzz", ',');
   printf("Prueba de split 6 -> [%s - %s - %s - %s] \n", prueba6[0], prueba6[1], prueba6[2], prueba6[3]);
+  char** prueba7 = split("a,b,c,,e,f,g,h,i,j", ',');
+  printf("Prueba de split 7 (Solo separadores) -> [%s - %s - %s - %s - %s - %s - %s - %s - %s - %s] \n", prueba7[0], prueba7[1], prueba7[2], prueba7[3], prueba7[4], prueba7[5], prueba7[6], prueba7[7], prueba7[8], prueba7[9]);
+  char** prueba8 = split(",,,,", ',');
+  printf("Prueba de split 8 (Solo separadores) -> [%s - %s - %s - %s - %s - %s] \n", prueba8[0], prueba8[1], prueba8[2], prueba8[3], prueba8[4], prueba8[5]);
 
   free_strv(prueba0);
   free_strv(prueba1);
@@ -55,6 +59,7 @@ void pruebas_split()
   free_strv(prueba4);
   free_strv(prueba5);
   free_strv(prueba6);
+  free_strv(prueba7);
 }
 
 void pruebas_join()
@@ -108,8 +113,8 @@ void pruebas_join()
 
 int main()
 {
-  pruebas_substr();
+  //pruebas_substr();
   pruebas_split();
-  pruebas_join();
+  //pruebas_join();
   return 0;
 }

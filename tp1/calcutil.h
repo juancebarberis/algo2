@@ -35,4 +35,16 @@ size_t operador_necesita(char* operador);
  * */
 int precedencia(char* operador);
 
+/**
+ * Determina si cada elemento de cadena pertenece a uno en permitidos.
+ * Devuelve 1 en caso de que lo sea, o 0 de lo contrario.
+ * */
+int in_string(char* cadena, char* permitidos);
+
+/**
+ * Recibe una cadena que representa una entrada en notación infija y devuelve un arreglo de cadenas separando elementos y numeros de manera correcta. 
+ * Limpia la cadena de ENF, espacios y cosas que no son comparables.
+ * */
+char** parse_linea(char* linea);
+
 #endif

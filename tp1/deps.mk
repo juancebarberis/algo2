@@ -1,2 +1,2 @@
-dc: dc.o strutil.o calcutil.h pila.o
-infix: strutil.o calcutil.h pila.o
+dc: dc.o strutil.o calcutil.o pila.o
+infix: infix.o strutil.o calcutil.o pila.o cola.o

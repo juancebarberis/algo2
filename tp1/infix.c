@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #define CANTIDAD_INICIAL 100
 #include<stdio.h>
 #include<stdlib.h>
@@ -11,38 +12,23 @@ void convertir(char* linea);
 
 int main()
 {
-  char* buffer = malloc(sizeof(char) * CANTIDAD_INICIAL);
-
-  if(!buffer) {
-    fprintf(stderr, "No es posible alojar memoria inicial...\n");
-    return -1;
-  }
-
-  char* linea;
-  size_t linea_len;
+  char* linea = NULL;
+  size_t capacidad = 0;
   
-  while(fgets(buffer, CANTIDAD_INICIAL, stdin))
+  while(getline(&linea, &capacidad, stdin) > 0)
   {
-    linea_len = strlen(buffer);
-
-    if(strcmp(buffer + linea_len - 1, "\n") == 0) {
-      linea = substr(buffer, linea_len - 1);
-      convertir(linea);
-      free(linea);
-    }
-    else
-      convertir(buffer);
+    if(strlen(linea) == 1) continue;
+    convertir(linea);
   }
-  free(buffer);
+  free(linea);
   return 0;
 }
 
 void convertir(char* linea)
 {
-  char** elementos = split(linea, ' ');
-
+  char** elementos = parse_linea(linea);
   if(!elementos) return;
-
+  
   char* elemento;
   char* aux;
   cola_t* output = cola_crear();

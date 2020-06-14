@@ -64,19 +64,23 @@ void calcular(char* linea)
     if(strlen(elemento) == 0) continue;
 
     if(es_operando(elemento)) {
+      if(in_string(elemento, "-0123456789") == 0) {
+        err_count++;
+        break;
+      }
       pila_apilar(pila, dynatol(elemento));
       operandos++;
     }
     else {
       if(operador_necesita(elemento) > operandos) {
-        fprintf(stdout, "ERROR\n");
-        pila_destruir(pila);
-        free_strv(elementos);
-        return;
+        err_count++;
+        break;
       }
       else {
         //Comparación del elemento con el operador. Si conincide, opera.
         aux = pila_desapilar(pila);
+        aux2 = NULL;
+        res = 0;
         if(strcmp(elemento, "+") == 0) {
           aux2 = pila_desapilar(pila);
           res = *aux + *aux2;
@@ -105,7 +109,7 @@ void calcular(char* linea)
             break;
           }
           aux2 = pila_desapilar(pila);
-          res = (long) powl((long double) *aux2, (long double) *aux);
+          res = pow(*aux2, *aux);
         }
         else if(strcmp(elemento, "sqrt") == 0) {
           if(*aux < 0) {
@@ -113,8 +117,7 @@ void calcular(char* linea)
             err_count++;
             break;
           }
-          aux2 = NULL;
-          res = (long) sqrt((double) *aux);
+          res = sqrt(*aux);
         }
         else if(strcmp(elemento, "log") == 0) {
           if(*aux < 2) {
@@ -123,7 +126,7 @@ void calcular(char* linea)
             break;
           }
           aux2 = pila_desapilar(pila);
-          res = (long) (log((double) *aux2) / log((double) *aux));
+          res = log(*aux2) / log(*aux);
         }
         else if(strcmp(elemento, "?") == 0) {
           aux2 = pila_desapilar(pila);
