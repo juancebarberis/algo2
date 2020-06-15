@@ -35,6 +35,12 @@ char **split(const char *str, char sep)
 
   if(!resultado) return NULL;
 
+  if(sep == '\0') {
+    resultado[0] = strdup(str);
+    resultado[1] = NULL;
+    return resultado;
+  }
+
   char* vacio = "";
   
   int k = 0; // Indice del resultado
@@ -65,10 +71,10 @@ char **split(const char *str, char sep)
         continue;
       }
 
-      if(i == len - 1) {  // Está al final
+      if(i == len - 1 && pos_separador != 0) {  // Está al final
         pos_separador++;
       }
-      
+
       if(pos_separador != 0 && str[pos_separador] == sep)
         pos_separador++;
 
@@ -76,11 +82,12 @@ char **split(const char *str, char sep)
       pos_separador = i;
       k++;
 
-      while(str[i + 1] == sep) {
+      while(str[i+1] == sep)
+      {
         resultado[k] = strdup(vacio);
         k++;
+        pos_separador++;
         i++;
-        pos_separador = i;
       }
     }
     else if(str[i] == '\0') {

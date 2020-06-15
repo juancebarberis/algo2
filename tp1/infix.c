@@ -26,47 +26,63 @@ int main()
 
 void convertir(char* linea)
 {
-  char** elementos = parse_linea(linea);
-  if(!elementos) return;
-  
-  char* elemento;
+  size_t len = strlen(linea);
   char* aux;
+  char e;
+  int j;
   cola_t* output = cola_crear();
   pila_t* operadores = pila_crear();
 
-  for(int i = 0; elementos[i]; i++)
+  for(int i = 0; i < len; i++)
   {
-    elemento = elementos[i];
+    e = linea[i];
 
-    if(strlen(elemento) == 0) continue;
-
-    if(es_operando(elemento) && strcmp(elemento, "(") != 0 && strcmp(elemento, ")") != 0) {
-      cola_encolar(output, elemento);
+    if(e == ' ') 
+      continue;
+    else if (e == '0' || e == '1' || e == '2' || e == '3' || e == '4' || e == '5' || e == '6' || e == '7' || e == '8' || e == '9') {
+      j = 0;
+      while (e == '0' || e == '1' || e == '2' || e == '3' || e == '4' || e == '5' || e == '6' || e == '7' || e == '8' || e == '9')
+      {
+        j++;
+        e = linea[i + j];
+      }
+      cola_encolar(output, substr(linea + i, j));
+      i += j - 1;
       continue;
     }
-    else if(strcmp(elemento, "(") == 0) {
-      pila_apilar(operadores, elemento);
-    }
-    else if(strcmp(elemento, ")") == 0) {
-      aux = pila_desapilar(operadores);
-      while(strcmp(aux, "(") != 0) {
-        cola_encolar(output, aux);
-        aux = pila_desapilar(operadores);
-      }
-    }
-    else if(!es_operando(elemento)) {
-      if(!pila_esta_vacia(operadores)) {
+    else if (e == '+' || e == '-' || e == '*' || e == '/' || e == '^') {
+      // Calculo de precedencia y asociatividad 
+      aux = pila_ver_tope(operadores);
+      while (aux && (precedencia(aux[0]) > precedencia(e) || (precedencia(aux[0]) == precedencia(e) && e != '^')) && aux[0] != '(')
+      {
+        cola_encolar(output, pila_desapilar(operadores));
         aux = pila_ver_tope(operadores);
-        while(!pila_esta_vacia(operadores) && ( precedencia(aux) > precedencia(elemento) || (precedencia(aux) == precedencia(elemento) && strcmp(elemento, "^") != 0)  ) && strcmp(aux, "(") )
-        {
-          cola_encolar(output, pila_desapilar(operadores));
-        }
       }
-      pila_apilar(operadores, elemento);
+      if (e == '+')
+        pila_apilar(operadores, strdup("+"));
+      else if (e == '-')
+        pila_apilar(operadores, strdup("-"));
+      else if (e == '*')
+        pila_apilar(operadores, strdup("*"));
+      else if (e == '/')
+        pila_apilar(operadores, strdup("/"));
+      else if (e == '^')
+        pila_apilar(operadores, strdup("^"));
     }
-    else {
-      fprintf(stdout, "Algo salió mal. Llegamos al else :( \n");
-      return;
+    else if (e == '(')
+    {
+      pila_apilar(operadores, strdup("("));
+    }
+    else if (e == ')')
+    {
+      aux = pila_ver_tope(operadores);
+      while (aux && aux[0] != '(')
+      {
+          cola_encolar(output, pila_desapilar(operadores));
+          aux = pila_ver_tope(operadores);
+      }
+      aux = pila_desapilar(operadores);
+      free(aux);
     }
   }
 
@@ -81,13 +97,13 @@ void convertir(char* linea)
   while(!cola_esta_vacia(output))
   {
     aux = cola_desencolar(output);
-    if(strcmp(aux, "(") == 0 || strcmp(aux, ")") == 0) continue;
-    fprintf(stdout, "%s ", aux);
+    if(aux[0] != '(' && aux[0] != ')')
+      fprintf(stdout, "%s ", aux);
+    free(aux);
   }
   fprintf(stdout, "\n");
 
   cola_destruir(output, free);
   pila_destruir(operadores);
-  free_strv(elementos);
   return;
 }

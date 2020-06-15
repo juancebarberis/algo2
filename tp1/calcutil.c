@@ -57,13 +57,13 @@ size_t operador_necesita(char* operador)
   return 0;
 }
 
-int precedencia(char* operador)
+int precedencia(char operador)
 {
-  if(strcmp(operador, "^") == 0)
+  if(operador == '^')
     return 3;
-  else if(strcmp(operador, "*") == 0 || strcmp(operador, "/") == 0)
+  else if(operador == '*' || operador == '/')
     return 2;
-  else if(strcmp(operador, "+") == 0 || strcmp(operador, "-") == 0)
+  else if(operador == '+' || operador == '-')
     return 1;
   
   return 0;
@@ -90,7 +90,7 @@ int in_string(char* cadena, char* permitidos)
 char** parse_linea(char* linea)
 {
   size_t len = strlen(linea);
-  char** resultado = calloc(len + (len / 4), sizeof(char*));
+  char** resultado = calloc(len + 1, sizeof(char*));
   size_t k = 0;
   size_t aux = 0;
 

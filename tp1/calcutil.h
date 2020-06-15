@@ -33,7 +33,7 @@ size_t operador_necesita(char* operador);
 /**
  * Otorga un valor numerico a la precedencia de un operador
  * */
-int precedencia(char* operador);
+int precedencia(char operador);
 
 /**
  * Determina si cada elemento de cadena pertenece a uno en permitidos.
