@@ -41,10 +41,4 @@ int precedencia(char operador);
  * */
 int in_string(char* cadena, char* permitidos);
 
-/**
- * Recibe una cadena que representa una entrada en notación infija y devuelve un arreglo de cadenas separando elementos y numeros de manera correcta. 
- * Limpia la cadena de ENF, espacios y cosas que no son comparables.
- * */
-char** parse_linea(char* linea);
-
 #endif

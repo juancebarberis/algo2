@@ -50,9 +50,11 @@ void pruebas_split()
   char** prueba7 = split("a,b,c,,e,f,g,h,i,j", ',');
   printf("Prueba de split 7 (Solo separadores) -> [%s - %s - %s - %s - %s - %s - %s - %s - %s - %s] \n", prueba7[0], prueba7[1], prueba7[2], prueba7[3], prueba7[4], prueba7[5], prueba7[6], prueba7[7], prueba7[8], prueba7[9]);
   char** prueba8 = split(",,,,,", ',');
-  printf("Prueba de split 8 (Solo separadores) -> [%s - %s - %s - %s - %s - %s] \n", prueba8[0], prueba8[1], prueba8[2], prueba8[3], prueba8[4], prueba8[5]);
+  printf("Prueba de split 8 (Solo separadores) -> [%s - %s - %s - %s - %s - %s - %s] \n", prueba8[0], prueba8[1], prueba8[2], prueba8[3], prueba8[4], prueba8[5], prueba8[6]);
   char **prueba9 = split("abc,", ',');
   printf("Prueba de split 9 (Sep. extra al final) -> [%s - %s - %s] \n", prueba9[0], prueba9[1], prueba9[2]);
+  char **prueba10 = split(",abc", ',');
+  printf("Prueba de split 10 (Sep. extra al principio) -> [%s - %s - %s] \n", prueba10[0], prueba10[1], prueba10[2]);
 
   free_strv(prueba0);
   free_strv(prueba1);
