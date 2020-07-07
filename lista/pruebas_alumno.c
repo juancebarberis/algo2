@@ -16,6 +16,7 @@ void prueba_generica_null()
     print_test("Lista largo = 1", lista_largo(lista) == 1);
     print_test("El último elemento es igual al primero", lista_ver_primero(lista) == lista_ver_ultimo(lista));
     print_test("Es posible remover el elemento NULL", lista_borrar_primero(lista) == NULL);
+    print_test("Lista está vacía", lista_esta_vacia(lista));
     print_test("Lista puede ser destruida", true);
     lista_destruir(lista, NULL);
 }
@@ -164,6 +165,16 @@ bool print_valores(void* valor, void* corte)
     return true;
 }
 
+bool comprobacion_de_primos(void* valor, void* status)
+{
+    int* val = valor;
+    if(!es_primo(*val)) {
+        status = false;
+        return false;
+    }
+    return true;
+}
+
 /**
  * En esta prueba: 
  * - Creamos una lista con números del 0 al 100. 
@@ -202,13 +213,13 @@ void prueba_iterador_externo_primos()
         else 
             lista_iter_avanzar(iter);
     }
-    //valor = lista_iter_ver_actual(iter);
-    //if(!es_primo(*valor)) //El ciclo no cae en el último elemento, por eso lo verifico aquí
-    //    lista_iter_borrar(iter);  
     print_test("El iterador ahora está al final", lista_iter_al_final(iter));
     print_test("El iterador puede ser borrado", true);
     lista_iter_destruir(iter);
-    print_test("La lista ahora solo tiene números primos", true);
+    printf("La lista ahora debería tener únicamente números primos\n");
+    bool status_comprobacion = true;
+    lista_iterar(lista, comprobacion_de_primos, &status_comprobacion);
+    print_test("Comprobación", status_comprobacion);
     lista_iterar(lista, print_valores, lista_ver_ultimo(lista));
     print_test("Podemos destruir la lista", true);
     lista_destruir(lista, NULL);
