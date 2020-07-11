@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 #include "strutil.h"
 #include "calcutil.h"
 #include "pila.h"
@@ -39,9 +40,9 @@ void convertir(char* linea)
 
     if(e == ' ') 
       continue;
-    else if (e == '0' || e == '1' || e == '2' || e == '3' || e == '4' || e == '5' || e == '6' || e == '7' || e == '8' || e == '9') {
+    else if (isdigit(e)) {
       j = 0;
-      while (e == '0' || e == '1' || e == '2' || e == '3' || e == '4' || e == '5' || e == '6' || e == '7' || e == '8' || e == '9')
+      while (isdigit(e))
       {
         j++;
         e = linea[i + j];
@@ -50,7 +51,7 @@ void convertir(char* linea)
       i += j - 1;
       continue;
     }
-    else if (e == '+' || e == '-' || e == '*' || e == '/' || e == '^') {
+    else if (strchr("+-*/^", e) != NULL) {
       // Calculo de precedencia y asociatividad 
       aux = pila_ver_tope(operadores);
       while (aux && (precedencia(aux[0]) > precedencia(e) || (precedencia(aux[0]) == precedencia(e) && e != '^')) && aux[0] != '(')
@@ -58,16 +59,7 @@ void convertir(char* linea)
         cola_encolar(output, pila_desapilar(operadores));
         aux = pila_ver_tope(operadores);
       }
-      if (e == '+')
-        pila_apilar(operadores, strdup("+"));
-      else if (e == '-')
-        pila_apilar(operadores, strdup("-"));
-      else if (e == '*')
-        pila_apilar(operadores, strdup("*"));
-      else if (e == '/')
-        pila_apilar(operadores, strdup("/"));
-      else if (e == '^')
-        pila_apilar(operadores, strdup("^"));
+      pila_apilar(operadores, substr(linea + i, 1));
     }
     else if (e == '(')
     {

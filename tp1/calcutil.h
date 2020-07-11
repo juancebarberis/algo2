@@ -4,10 +4,10 @@
 #include<stdlib.h>
 
 /**
- * Recibe una cadena y comprueba si es una operando válido.
- * Devuelve 1 en caso de que sea un operando, o 0 si no lo es.
+ * Recibe una cadena y comprueba si es una operador válido.
+ * Devuelve 1 en caso de que sea un operador, o 0 si no lo es.
  * */
-int es_operando(char* cadena);
+int es_operador(char* cadena);
 
 /**
  * Recibe una cadena y la convierte a long, alojandola en memoria dinámica.

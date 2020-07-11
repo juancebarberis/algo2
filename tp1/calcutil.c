@@ -3,8 +3,9 @@
 #include <string.h>
 #include<stdio.h>
 #include "strutil.h"
+#include "calcutil.h"
 
-int es_operando(char* cadena)
+int es_operador(char* cadena)
 {
   if(
     strcmp(cadena, "+") != 0 
@@ -16,13 +17,15 @@ int es_operando(char* cadena)
     && strcmp(cadena, "log") != 0 
     && strcmp(cadena, "?") != 0
     )
-    return 1;
-  else
     return 0;
+  else
+    return 1;
 }
 
 long* dynatol(const char *str)
 {
+  if(in_string((char*) str, "-0123456789") == 0) return NULL;
+  
   long* value = malloc(sizeof(long));
 
   if(!value) 
@@ -72,10 +75,10 @@ int precedencia(char operador)
 int in_string(char* cadena, char* permitidos) 
 {
   size_t equals;
-  for(int i = 0; i < strlen(cadena); i++)
+  for(int i = 0; cadena[i] != '\0'; i++)
   {
     equals = 0;
-    for(int j = 0; j < strlen(permitidos); j++)
+    for(int j = 0; permitidos[j] != '\0'; j++)
     { 
       if(cadena[i] == permitidos[j]) {
         equals++;

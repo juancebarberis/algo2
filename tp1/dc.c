@@ -23,20 +23,17 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  char* linea;
   size_t linea_len;
   
   while(fgets(buffer, CANTIDAD_INICIAL, stdin))
   {
     linea_len = strlen(buffer);
 
-    if(strcmp(buffer + linea_len - 1, "\n") == 0) {
-      linea = substr(buffer, linea_len - 1);
-      calcular(linea);
-      free(linea);
+    if(buffer[linea_len - 1] == '\n') {
+      buffer[linea_len - 1] = '\0';
     }
-    else
-      calcular(buffer);
+    
+    calcular(buffer);
   }
   free(buffer);
   return 0;
@@ -63,13 +60,15 @@ void calcular(char* linea)
 
     if(strlen(elemento) == 0) continue;
 
-    if(es_operando(elemento)) {
-      if(in_string(elemento, "-0123456789") == 0) {
+    if(!es_operador(elemento)) {
+      if ((aux = dynatol(elemento)) != NULL) {
+        pila_apilar(pila, aux);
+        operandos++;
+        continue;
+      } else if (!es_operador(elemento) || operador_necesita(elemento) > operandos) {
         err_count++;
         break;
       }
-      pila_apilar(pila, dynatol(elemento));
-      operandos++;
     }
     else {
       if(operador_necesita(elemento) > operandos) {
