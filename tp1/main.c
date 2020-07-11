@@ -66,6 +66,7 @@ void pruebas_split()
   free_strv(prueba7);
   free_strv(prueba8);
   free_strv(prueba9);
+  free_strv(prueba10);
 }
 
 void pruebas_join()
@@ -119,8 +120,8 @@ void pruebas_join()
 
 int main()
 {
-  //pruebas_substr();
+  pruebas_substr();
   pruebas_split();
-  //pruebas_join();
+  pruebas_join();
   return 0;
 }

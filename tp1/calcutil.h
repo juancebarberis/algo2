@@ -35,10 +35,4 @@ size_t operador_necesita(char* operador);
  * */
 int precedencia(char operador);
 
-/**
- * Determina si cada elemento de cadena pertenece a uno en permitidos.
- * Devuelve 1 en caso de que lo sea, o 0 de lo contrario.
- * */
-int in_string(char* cadena, char* permitidos);
-
 #endif

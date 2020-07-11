@@ -10,12 +10,12 @@ char *substr(const char *str, size_t n)
 {
   size_t len = strlen(str);
 
-  char* resultado = malloc((len + 1) * sizeof(char));
-  
-  if(len == 0) 
-    resultado[0] = str[0];
+  char* resultado = malloc((n + 1) * sizeof(char));
 
   if(!resultado) return NULL;
+
+  if(len == 0) 
+    resultado[0] = str[0];
 
   if(n > len) n = len;
 
@@ -35,21 +35,13 @@ char **split(const char *str, char sep)
 
   if(!resultado) return NULL;
 
-  if(sep == '\0') {
-    resultado[0] = strdup(str);
-    resultado[1] = NULL;
-    return resultado;
-  }
-
-  char* vacio = "";
-  
   int k = 0; // Indice del resultado
   int pos_separador = 0; // Indice del separador
 
   for(int i = 0; i < len + 1; i++)
   {
     if(len == 0) {
-      resultado[k] = strdup(vacio);
+      resultado[k] = substr(str, 0);
       k++;
       break;
     }
@@ -57,19 +49,16 @@ char **split(const char *str, char sep)
     if(str[i] == sep)
     {
       if(len == 1) {
-        resultado[k] = strdup(vacio);
-        resultado[k + 1] = strdup(vacio);
+        resultado[k] = substr(str, 0);
+        resultado[k + 1] = substr(str, 0);
         k += 2;
         break;
       }
 
-      if(i == 0) {
-        resultado[k] = strdup(vacio);
-      }
-      else {
-        if(k > 0) pos_separador++;
-        resultado[k] = substr(str + pos_separador, i - pos_separador);
-      }
+      if(k > 0) pos_separador++;
+
+      resultado[k] = substr(str + pos_separador, i == 0 ? 0 : i - pos_separador);
+
       k++;
       pos_separador = i;
     }
@@ -104,9 +93,7 @@ char *join(char **strv, char sep)
   
   char* final_actual;
   
-  char* separador = malloc(sizeof(char) * 2);
-  separador[0] = sep;
-  separador[1] = '\0';
+  char separador[] = {sep, '\0'};
 
   size_t len = 0;
   
@@ -114,18 +101,12 @@ char *join(char **strv, char sep)
   {
     len += strlen(strv[i]);
 
-    if(len == 0 && strv[i+1])  {
-      final_actual = stpcpy(i == 0 ? resultado : final_actual, separador);
-      continue;
-    }
-
     final_actual = stpcpy(i == 0 ? resultado : final_actual, strv[i]);
     if(strv[i + 1]) {
       final_actual = stpcpy(final_actual, separador);
     } 
     
   }
-  free(separador);
 
   return resultado;
 }

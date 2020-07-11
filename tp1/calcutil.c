@@ -24,14 +24,16 @@ int es_operador(char* cadena)
 
 long* dynatol(const char *str)
 {
-  if(in_string((char*) str, "-0123456789") == 0) return NULL;
-  
+  char* resto;
+  long r = strtol(str, &resto, 10);
+
+  if(resto == str || *resto != '\0') return NULL;
+
   long* value = malloc(sizeof(long));
 
-  if(!value) 
-    return NULL;
+  if(!value) return NULL;
 
-  value[0] = atol(str);
+  value[0] = r;
 
   return value; 
 }
@@ -72,20 +74,3 @@ int precedencia(char operador)
   return 0;
 }
 
-int in_string(char* cadena, char* permitidos) 
-{
-  size_t equals;
-  for(int i = 0; cadena[i] != '\0'; i++)
-  {
-    equals = 0;
-    for(int j = 0; permitidos[j] != '\0'; j++)
-    { 
-      if(cadena[i] == permitidos[j]) {
-        equals++;
-        break;  
-      }
-    }
-    if(equals == 0) return 0;
-  }
-  return 1;
-}
